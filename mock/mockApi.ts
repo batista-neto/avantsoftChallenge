@@ -31,11 +31,10 @@ mock.onPost(`${url}/client`).reply((config) => {
       const {
         name,
         email,
-        password,
         dateOfBirth
       } = JSON.parse(data);
   
-      if (name && email && password && dateOfBirth) {
+      if (name && email && dateOfBirth) {
         const exists = mockResponse.data.clientes.find(user => user.info.detalhes.email === email);
         if (exists) {
           return [409, { message: 'User already exists' }];
@@ -56,7 +55,7 @@ mock.onPost(`${url}/client`).reply((config) => {
         mockResponse.data.clientes.push(payload);
 
         mockResponse.meta.registroTotal += 1;
-  
+        
         return [201, { message: 'Registration completed successfully!' }];
       } else {
         return [400, { message: 'Fill in all fields correctly' }];
@@ -65,5 +64,7 @@ mock.onPost(`${url}/client`).reply((config) => {
   
     return [400, { message: 'Error processing request' }];
   });
+
+  mock.onGet(`${url}/report`).reply(200, mockResponse);
 
 export default axios;
