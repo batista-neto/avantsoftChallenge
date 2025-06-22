@@ -10,16 +10,12 @@ export class RegisterControllerImpl implements RegisterController {
         private navigator: Navigator
     ) {}
 
-    async register(user: User, confirmPassword: string): Promise<void> {
+    async register(user: User): Promise<void> {
         this.observer?.onLoading?.(true);
-        if (user.password !== confirmPassword) {
-            this.observer?.onError("Passwords do not match");
-            return;
-        }
         try {
             await this.registerService.register(user);
             this.observer?.onRegisterSuccess();
-            this.navigator.navigate("Login");
+            this.navigator.goBack();;
         } catch (error) {
             this.observer?.onError();
         } finally {

@@ -9,12 +9,11 @@ export class RegisterServiceImpl implements RegisterService {
             const body = {
                 name: user.name,
                 email: user.email,
-                password: user.password,
                 dateOfBirth: user.dateOfBirth
             };
     
-            await axios.post(`${this.baseUrl}/user`, body);
-            
+            await axios.post(`${this.baseUrl}/client`, body);
+
             } catch (error: any) {
             throw error;
         }

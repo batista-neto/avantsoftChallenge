@@ -1,8 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
 import { useInject } from "core/di/screens";
 import { ScreenInfo } from "core/navigation/api";
 import { RegisterController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { DateInput } from '../components/dateInput';
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
@@ -11,13 +12,12 @@ import { formatDate } from "../utils/formatDate";
 const RegisterScreen = () => {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [dateOfBirth, setDateOfBirth] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const [error, setError] = useState<boolean>(false);
 
     const registerController = useInject<RegisterController>("RegisterController");
+    const navigation = useNavigation();
 
     const handleDateChange = (_event: any, selectedDate?: Date) => {
         setShowPicker(false);
@@ -31,8 +31,6 @@ const RegisterScreen = () => {
             onRegisterSuccess: () => {
                 setName("");
                 setEmail("");
-                setPassword("");
-                setConfirmPassword("");
                 setDateOfBirth(new Date());
                 setError(false);
             },
@@ -43,11 +41,11 @@ const RegisterScreen = () => {
                 console.log("Loading:", isLoading);
             }
         });
-    })
+    }, []);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.box}>
+        <Pressable style={styles.overlay} onPress={() => navigation.goBack()}>
+            <View style={styles.modalContainer}>
                 <Form 
                     title="Full name"
                     value={name}
@@ -60,22 +58,6 @@ const RegisterScreen = () => {
                     value={email}
                     onChangeValue={setEmail}
                     placeholder="Insert your email"
-                />
-
-                <Form 
-                    title="Password"
-                    value={password}
-                    onChangeValue={setPassword}
-                    placeholder="Insert your password"
-                    isPassword={true}
-                />
-
-                <Form 
-                    title="Confirm your Password"
-                    value={confirmPassword}
-                    onChangeValue={setConfirmPassword}
-                    placeholder="Insert the same password"
-                    isPassword={true}
                 />
 
                 <DateInput 
@@ -91,36 +73,36 @@ const RegisterScreen = () => {
                 <View style={styles.buttonBox}>
                     <MyButton 
                         value="Register"
-                        props={{ onPress: () => registerController.register({name, email, password, dateOfBirth: formatDate(dateOfBirth)}, confirmPassword)}}
+                        props={{ onPress: () => 
+                            registerController.register(
+                                { name, email, dateOfBirth: formatDate(dateOfBirth) }
+                            )
+                        }}
                     />
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    overlay: {
         flex: 1,
-        alignContent: "center",
-        justifyContent: "center",
-        backgroundColor: "#fff",
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    box: {
-        alignContent: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 20,
+    modalContainer: {
         width: '90%',
-        alignSelf: 'center',
-        elevation: 6,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        padding: 24,
+        elevation: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 6,
-        },
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+    },
     textError: {
         color: "red",
         fontSize: 16,
@@ -128,7 +110,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     buttonBox: {
-        width: "80%",
+        width: "100%",
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
@@ -136,9 +118,7 @@ const styles = StyleSheet.create({
 });
 
 export function getRegisterScreenInfo(): ScreenInfo {
-    return new ScreenInfo("Register", RegisterScreen, "Register", "default", false);
-  }
+    return new ScreenInfo("Register", RegisterScreen, undefined, "default", false);
+}
 
 export default RegisterScreen;
-
-
