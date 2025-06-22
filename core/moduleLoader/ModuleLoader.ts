@@ -1,0 +1,9 @@
+import { DIMapper } from "core/di/api";
+import AccountProviderUi from "modules/account/ui/main";
+import { DIContainer } from "../di/api/DIContainer";
+export class ModuleLoader {
+    static loadModules(container: DIMapper & DIContainer): void {
+        //Account module
+        AccountProviderUi(container); 
+    }
+}
