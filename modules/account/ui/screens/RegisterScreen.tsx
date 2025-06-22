@@ -1,16 +1,60 @@
+import { useInject } from "core/di/screens";
 import { ScreenInfo } from "core/navigation/api";
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { RegisterController } from "modules/account/business/api";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { DateInput } from '../components/dateInput';
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
+import { formatDate } from "../utils/formatDate";
 
 const RegisterScreen = () => {
+    const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+    const [error, setError] = useState<boolean>(false);
+
+    const registerController = useInject<RegisterController>("RegisterController");
+
+    const handleDateChange = (_event: any, selectedDate?: Date) => {
+        setShowPicker(false);
+        if (selectedDate) {
+            setDateOfBirth(selectedDate);
+        }
+    };
+
+    useEffect(() => {
+        registerController.subscribe({
+            onRegisterSuccess: () => {
+                setName("");
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+                setDateOfBirth(new Date());
+                setError(false);
+            },
+            onError: () => {
+                setError(true);
+            },
+            onLoading: (isLoading) => {
+                console.log("Loading:", isLoading);
+            }
+        });
+    })
 
     return (
         <View style={styles.container}>
             <View style={styles.box}>
+                <Form 
+                    title="Full name"
+                    value={name}
+                    onChangeValue={setName}
+                    placeholder="Insert your full name"
+                />
+
                 <Form 
                     title="Email"
                     value={email}
@@ -28,16 +72,26 @@ const RegisterScreen = () => {
 
                 <Form 
                     title="Confirm your Password"
-                    value={password}
-                    onChangeValue={setPassword}
+                    value={confirmPassword}
+                    onChangeValue={setConfirmPassword}
                     placeholder="Insert the same password"
                     isPassword={true}
                 />
 
+                <DateInput 
+                    date={dateOfBirth}
+                    setDate={setDateOfBirth}
+                    showPicker={showPicker}
+                    setShowPicker={setShowPicker}
+                    handleDateChange={handleDateChange}
+                />
+
+                {error && <Text style={styles.textError}>Fill in all fields correctly</Text>}
+
                 <View style={styles.buttonBox}>
                     <MyButton 
                         value="Register"
-                        props={{ onPress: () => {} }}
+                        props={{ onPress: () => registerController.register({name, email, password, dateOfBirth: formatDate(dateOfBirth)}, confirmPassword)}}
                     />
                 </View>
             </View>
@@ -78,7 +132,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
-    }
+    },
 });
 
 export function getRegisterScreenInfo(): ScreenInfo {

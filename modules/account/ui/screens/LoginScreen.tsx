@@ -16,6 +16,8 @@ const LoginScreen = () => {
     useEffect(() => {
         authController.subscribe({
             onLoginSuccess: (token) => {
+                setEmail("");
+                setPassword("");
                 setLoginError(false);
             },
             onError: (error) => {
