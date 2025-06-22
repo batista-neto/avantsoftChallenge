@@ -60,7 +60,4 @@
 O candidato deve extrair corretamente os dados relevantes e ignorar as informações desnecessárias ou duplicadas.
 
 Requisitos:
-API com autenticação rest
-Banco de dados obrigatório no backend
 Front pode consumir API real ou mockada via ferramenta
-Testes obrigatórios no backend

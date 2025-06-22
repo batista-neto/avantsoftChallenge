@@ -1,8 +1,9 @@
 import { useInject } from "core/di/screens";
-import { ScreenInfo } from "core/navigation/api";
+import { Navigator, ScreenInfo } from "core/navigation/api";
 import { AuthController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { ButtonText } from "../components/buttonText";
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
 
@@ -12,6 +13,7 @@ const LoginScreen = () => {
     const [loginError, setLoginError] = useState<boolean>(false);
 
     const authController = useInject<AuthController>("AuthController");
+    const navigator = useInject<Navigator>("Navigator");
 
     useEffect(() => {
         authController.subscribe({
@@ -55,6 +57,15 @@ const LoginScreen = () => {
                         props={{ onPress: () => authController.login(email, password) }}
                     />
                 </View>
+
+                <View style={styles.thirdContent}>
+                    <Text style={styles.text}>New to Avantsoft?</Text>
+                    <ButtonText
+                        value="Register"
+                        textColor="#000"
+                        props={{onPress: () => navigator.navigate('Register')}}
+                    />
+                </View>
             </View>
         </View>
     );
@@ -93,7 +104,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
-    }
+    },
+    thirdContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    text: {
+        fontSize: 14,
+        marginRight: 5,
+        color: '#000',
+        fontFamily: 'Roboto-Regular',
+    },
 });
 
 export function getLoginScreenInfo(): ScreenInfo {
