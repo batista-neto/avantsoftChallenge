@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'mobilidriverapp'
+rootProject.name = 'avantsoftapp'
 
 dependencyResolutionManagement {
   versionCatalogs {

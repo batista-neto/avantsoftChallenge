@@ -1,4 +1,4 @@
-package com.mobilidriverapp
+package com.avantsoftapp
 
 import android.os.Build
 import android.os.Bundle

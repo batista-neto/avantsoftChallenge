@@ -1,4 +1,4 @@
-package com.mobilidriverapp
+package com.avantsoftapp
 
 import android.app.Application
 import android.content.res.Configuration

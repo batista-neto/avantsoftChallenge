@@ -1,31 +1,12 @@
-import { useInject } from "core/di/screens";
 import { ScreenInfo } from "core/navigation/api";
-import { AuthController } from "modules/account/business/api";
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [loginError, setLoginError] = useState<boolean>(false);
-
-    const authController = useInject<AuthController>("AuthController");
-
-    useEffect(() => {
-        authController.subscribe({
-            onLoginSuccess: (token) => {
-                setLoginError(false);
-            },
-            onError: (error) => {
-                setLoginError(true);
-            },
-            onLoading: (isLoading) => {
-                console.log("Loading:", isLoading);
-            }
-        })
-    })
 
     return (
         <View style={styles.container}>
@@ -45,12 +26,18 @@ const LoginScreen = () => {
                     isPassword={true}
                 />
 
-                {loginError && <Text style={styles.textError}>Ivalid email or password </Text>}
+                <Form 
+                    title="Confirm your Password"
+                    value={password}
+                    onChangeValue={setPassword}
+                    placeholder="Insert the same password"
+                    isPassword={true}
+                />
 
                 <View style={styles.buttonBox}>
                     <MyButton 
-                        value="Login"
-                        props={{ onPress: () => authController.login(email, password) }}
+                        value="Register"
+                        props={{ onPress: () => {} }}
                     />
                 </View>
             </View>
@@ -94,10 +81,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export function getLoginScreenInfo(): ScreenInfo {
-    return new ScreenInfo("Login", LoginScreen, "Login", "default", false);
+export function getRegisterScreenInfo(): ScreenInfo {
+    return new ScreenInfo("Register", RegisterScreen, "Register", "default", false);
   }
 
-export default LoginScreen;
+export default RegisterScreen;
 
 

@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.mobilidriverapp"
+    namespace "com.avantsoftapp"
     defaultConfig {
-        applicationId "com.mobilidriverapp"
+        applicationId "com.avantsoftapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
