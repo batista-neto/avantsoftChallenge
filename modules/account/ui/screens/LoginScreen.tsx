@@ -35,10 +35,10 @@ const LoginScreen = () => {
         <View style={styles.container}>
             <View style={styles.box}>
                 <Form 
-                    title="Email"
+                    title="Username"
                     value={email}
                     onChangeValue={setEmail}
-                    placeholder="Insert your email"
+                    placeholder="Insert your username"
                 />
 
                 <Form 

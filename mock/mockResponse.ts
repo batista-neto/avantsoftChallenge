@@ -6,7 +6,6 @@ export const mockResponse = {
                     "nomeCompleto": "Ana Beatriz",
                     "detalhes": {
                         "email": "ana.b@example.com",
-                        "password": "ana123",
                         "nascimento": "1992-05-01"
                     }
                 },
@@ -28,7 +27,6 @@ export const mockResponse = {
                     "nomeCompleto": "Carlos Eduardo",
                     "detalhes": {
                         "email": "cadu@example.com",
-                        "password": "cadu123",
                         "nascimento": "1987-08-15"
                     }
                 },

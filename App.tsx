@@ -11,7 +11,6 @@ import { DIProvider } from 'core/di/screens';
 import { NavDefaultTree } from 'core/navigation';
 import { ScreenFactoryFactory, ScreenGroups } from 'core/navigation/api';
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
 export default function App() {
   const container = DIContainerImpl.getDefault();
@@ -26,20 +25,10 @@ export default function App() {
     Roboto_600SemiBold,
     Roboto_700Bold,
   });
-
+  
   return (
     <DIProvider container={container}>
       {tree.create(factory, groups)}
     </DIProvider>
   );
 }
-
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: 'blue',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

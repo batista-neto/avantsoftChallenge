@@ -7,9 +7,9 @@ export class AuthServiceImpl implements AuthService {
 
     private baseUrl = process.env.EXPO_PUBLIC_BASE_URL;
 
-    async login(email: string, password: string): Promise<string> {
+    async login(username: string, password: string): Promise<string> {
         try {
-            const basicToken = base64.encode(`${email}:${password}`);
+            const basicToken = base64.encode(`${username}:${password}`);
     
             const headers = {
                 Authorization: `Basic ${basicToken}`,

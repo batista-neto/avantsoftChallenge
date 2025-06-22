@@ -11,12 +11,12 @@ export class AuthControllerImpl implements AuthController {
         private navigator: Navigator,
     ) {}
 
-    async login(email: string, password: string): Promise<void> {
+    async login(username: string, password: string): Promise<void> {
         this.observer?.onLoading?.(true);
         try {
-            const token = await this.authService.login(email, password);
+            const token = await this.authService.login(username, password);
             this.observer?.onLoginSuccess?.(token);
-            this.navigator.navigate("Register");
+            this.navigator.navigate("Home");
         } catch (error) {
             this.observer?.onError?.("Login failed");
         } finally {

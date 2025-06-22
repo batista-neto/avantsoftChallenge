@@ -13,13 +13,9 @@ mock.onPost(`${url}/auth/login`).reply((config: any): any => {
 
   if (authorizationHeader && authorizationHeader.startsWith('Basic')) {
     const credentials = base64.decode(authorizationHeader.split(' ')[1]);
-    const [email, password] = credentials.split(':');
-
-    const user = mockResponse.data.clientes.find(
-        (u) => u.info.detalhes.email === email && u.info.detalhes.password === password
-      );
+    const [username, password] = credentials.split(':');
       
-    if (user) {
+    if (username == "admin" && password == "admin") {
         return [200, { token: 'AccessToken' }];
     } else {
         return [401];
@@ -28,7 +24,7 @@ mock.onPost(`${url}/auth/login`).reply((config: any): any => {
   }
 });
 
-mock.onPost(`${url}/user`).reply((config) => {
+mock.onPost(`${url}/client`).reply((config) => {
     const { data } = config;
   
     if (data) {
@@ -49,7 +45,6 @@ mock.onPost(`${url}/user`).reply((config) => {
                 "nomeCompleto": name,
                 "detalhes": {
                     "email": email,
-                    "password": password,
                     "nascimento": dateOfBirth
                 }
             },
