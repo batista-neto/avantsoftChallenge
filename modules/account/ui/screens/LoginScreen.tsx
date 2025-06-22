@@ -3,7 +3,6 @@ import { Navigator, ScreenInfo } from "core/navigation/api";
 import { AuthController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ButtonText } from "../components/buttonText";
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
 
@@ -22,7 +21,7 @@ const LoginScreen = () => {
                 setPassword("");
                 setLoginError(false);
             },
-            onError: (error) => {
+            onError: () => {
                 setLoginError(true);
             },
             onLoading: (isLoading) => {
@@ -55,15 +54,6 @@ const LoginScreen = () => {
                     <MyButton 
                         value="Login"
                         props={{ onPress: () => authController.login(email, password) }}
-                    />
-                </View>
-
-                <View style={styles.thirdContent}>
-                    <Text style={styles.text}>New to Avantsoft?</Text>
-                    <ButtonText
-                        value="Register"
-                        textColor="#000"
-                        props={{onPress: () => navigator.navigate('Register')}}
                     />
                 </View>
             </View>
@@ -104,17 +94,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
-    },
-    thirdContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 20,
-    },
-    text: {
-        fontSize: 14,
-        marginRight: 5,
-        color: '#000',
-        fontFamily: 'Roboto-Regular',
     },
 });
 
