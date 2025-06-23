@@ -42,13 +42,11 @@ export class HomeScreenControllerImpl implements HomeScreenController {
 
     getCustumerWithMostFrequency(clients: Client[]): { name: string, qty: number } {
         const response = clients.flat().reduce((mostFrequency, client) => {
-            console.log(JSON.stringify(client));
             const qty = client.statistics.sales.length;
         
             return qty > mostFrequency.qty ? { name: client.user.name, qty } : mostFrequency;
         }, { name: "", qty: 0 });
 
-        console.log(response.qty)
           return { name: response.name, qty: response.qty };
     }
 
