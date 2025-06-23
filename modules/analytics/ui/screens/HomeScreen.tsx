@@ -17,8 +17,8 @@ const HomeScreen = () => {
 
     const homeScreenControler = useInject<HomeScreenController>("HomeScreenController");
 
-    const customerWithHighestAvarageSale = homeScreenControler.getCustomerWithHighestAvarageSale(clients, selectedDate)
-
+    const customerWithHighestSalesVolume = homeScreenControler.getCustomerWithHighestSalesVolume(clients);
+    const customerWithHighestAvarageSale = homeScreenControler.getCustomerWithHighestAvarageSale(clients)
     const clientEithMostFrequency = homeScreenControler.getCustumerWithMostFrequency(clients)
 
     useEffect(() => {
@@ -56,6 +56,12 @@ const HomeScreen = () => {
             <Header title="Sales report" />
             <ScrollView contentContainerStyle={styles.container}>
                 <BarChart clients={clients} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+
+                <BoxtInfo
+                    title="Customer with the highest sales volume:"
+                    name={customerWithHighestSalesVolume.name || "Nenhum"}
+                    total={`Purchases: ${customerWithHighestSalesVolume.total}`}
+                />
 
                 <BoxtInfo
                     title="Customer with the highest average sales:"

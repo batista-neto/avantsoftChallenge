@@ -17,27 +17,30 @@ export class HomeScreenControllerImpl implements HomeScreenController {
         }
     }
 
-    getCustomerWithHighestAvarageSale(clients: Client[], selectedDate: Date): {name: string, average: number} {
-       const response = clients.reduce(
-        (topClient, client) => {
-          const vendasFiltradas = client.statistics.sales.filter(
-            (venda) => venda.data === this.formatDate(selectedDate)
-          );
-      
-          if (vendasFiltradas.length === 0) return topClient;
-      
-          const media =
-            vendasFiltradas.reduce((sum, venda) => sum + venda.valor, 0) /
-            vendasFiltradas.length;
-      
-          return media > topClient.media
-            ? { nome: client.user.name, media }
-            : topClient;
-        },
-        { nome: '', media: 0 }
+    getCustomerWithHighestSalesVolume(clients: Client[]): { name: string; total: number } {
+      const topClient = clients.reduce((acc, client) => {
+          const total = client.statistics.sales.reduce((sum, sale) => sum + sale.valor, 0);
+    
+          return total > acc.total ? { name: client.user.name, total } : acc;}, { name: '', total: 0 }
       );
+    
+      return topClient;
+    }
 
-        return {name: response.nome, average: response.media};
+    getCustomerWithHighestAvarageSale(clients: Client[]): {name: string, average: number} {
+      const response = clients.reduce((topClient, client) => {
+          const sales = client.statistics.sales;
+      
+          if (sales.length === 0) return topClient;
+      
+          const clientAverage = sales.reduce((sum, sale) => sum + sale.valor, 0) / sales.length;
+      
+          return clientAverage > topClient.average ? { name: client.user.name, average: clientAverage } : topClient;
+        },
+        { name: '', average: 0 }
+      );
+      
+      return { name: response.name, average: response.average };
     }
 
     getCustumerWithMostFrequency(clients: Client[]): { name: string, qty: number } {
@@ -47,7 +50,7 @@ export class HomeScreenControllerImpl implements HomeScreenController {
             return qty > mostFrequency.qty ? { name: client.user.name, qty } : mostFrequency;
         }, { name: "", qty: 0 });
 
-          return { name: response.name, qty: response.qty };
+          return response;
     }
 
     getLetterForCustomer(name: string): string {
