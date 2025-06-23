@@ -1,6 +1,6 @@
+import { Report } from "../models/Report";
+
 export interface HomeScreenObserver {
-    onSalesReport(salesReport: any): void;
-    onCustomerWithHighestSale(customer: any): void;
-    onCustomerWithMostSales(customer: any): void;
-    onLetterForCustomer(letter: string): void;
+    onSalesReport(salesReport: Report): void;
+    onError(mesage: string): void;
 }

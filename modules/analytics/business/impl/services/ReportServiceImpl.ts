@@ -11,11 +11,15 @@ export class ReportServiceImpl implements ReportService {
             
             const payload: Report = {
                 clients: [
-                    response.data.clients.map((client: any) => ({
-                        name: client.info.nomeCompleto,
-                        email: client.info.detalhes.email,
-                        birthDate: client.info.detalhes.nascimento,
-                        sales: client.estatisticas.vendas || []
+                    response.data.data.clientes.map((client: any) => ({
+                        user: {
+                            name: client.info.nomeCompleto,
+                            email: client.info.detalhes.email,
+                            birthDate: client.info.detalhes.nascimento,
+                        },
+                        statistics: {
+                            sales: client.estatisticas.vendas || []
+                        }
                     }))
                 ],
                 meta: {
@@ -23,7 +27,7 @@ export class ReportServiceImpl implements ReportService {
                     page: response.data.meta?.page || 1
                 }
             }
-
+            
             return payload;
         } catch (error) {
             throw new Error("Failed to fetch sales report");
