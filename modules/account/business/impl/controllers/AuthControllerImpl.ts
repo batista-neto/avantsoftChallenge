@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Navigator } from "../../../../../core/navigation/api";
 import { AuthController } from "../../api/controllers/AuthController";
 import { AuthObserver } from "../../api/observers/AuthObserver";
@@ -28,11 +29,23 @@ export class AuthControllerImpl implements AuthController {
         this.observer?.onLoading?.(true);
         try {
             await this.authService.logout();
+            this.navigator.navigate("Login");
             this.observer?.onLogoutSuccess?.();
         } catch (error) {
             this.observer?.onError?.("Logout failed");
         } finally {
             this.observer?.onLoading?.(false);
+        }
+    }
+
+    async isLogedIn(): Promise<void> {
+        try {
+            const login = await AsyncStorage.getItem("login");
+            if (login) {
+                this.navigator.navigate("Home");
+            }
+        } catch (error) {
+            this.observer?.onError?.("Failed to check login status");
         }
     }
 

@@ -27,7 +27,11 @@ export class AuthServiceImpl implements AuthService {
         }
     }
 
-    logout(): Promise<void> {
-        throw new Error("Method not implemented.");
+    async logout(): Promise<void> {
+        try {
+            await AsyncStorage.removeItem("login");
+        } catch (error) {
+            throw error;
+        }
     }
 }
