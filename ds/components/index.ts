@@ -1,3 +1,3 @@
-import { ActionTile } from "./actionTile";
+export * from './actionTile';
+export * from './spinner';
 
-export { ActionTile };

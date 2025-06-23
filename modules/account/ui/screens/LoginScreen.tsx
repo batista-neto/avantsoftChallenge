@@ -1,19 +1,30 @@
 import { useInject } from "core/di/screens";
 import { ScreenInfo } from "core/navigation/api";
+import { Spinner } from "ds/components";
 import { AuthController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { BackHandler, StyleSheet, Text, View } from "react-native";
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
 
 const LoginScreen = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [loginError, setLoginError] = useState<boolean>(false);
 
     const authController = useInject<AuthController>("AuthController");
 
     useEffect(() => {
+        const backAction = () => {
+            BackHandler.exitApp();
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction
+        );
+
         authController.subscribe({
             onLoginSuccess: (token) => {
                 setEmail("");
@@ -24,41 +35,47 @@ const LoginScreen = () => {
                 setLoginError(true);
             },
             onLoading: (isLoading) => {
-                console.log("Loading:", isLoading);
+                setIsLoading(isLoading);
             }
         })
 
+        authController.isLogedIn();
+
         return () => {
             authController.unSubscribe();
+            backHandler.remove();
         }
     }, []);
 
     return (
         <View style={styles.container}>
             <View style={styles.box}>
-                <Form 
-                    title="Username"
-                    value={email}
-                    onChangeValue={setEmail}
-                    placeholder="Insert your username"
-                />
-
-                <Form 
-                    title="Password"
-                    value={password}
-                    onChangeValue={setPassword}
-                    placeholder="Insert your password"
-                    isPassword={true}
-                />
-
-                {loginError && <Text style={styles.textError}>Ivalid email or password </Text>}
-
-                <View style={styles.buttonBox}>
-                    <MyButton 
-                        value="Login"
-                        props={{ onPress: () => authController.login(email, password) }}
+                {isLoading ? <Spinner /> :
+                <>
+                    <Form 
+                        title="Username"
+                        value={email}
+                        onChangeValue={setEmail}
+                        placeholder="Insert your username"
                     />
-                </View>
+
+                    <Form 
+                        title="Password"
+                        value={password}
+                        onChangeValue={setPassword}
+                        placeholder="Insert your password"
+                        isPassword={true}
+                    />
+
+                    {loginError && <Text style={styles.textError}>Ivalid email or password </Text>}
+
+                    <View style={styles.buttonBox}>
+                        <MyButton 
+                            value="Login"
+                            props={{ onPress: () => authController.login(email, password) }}
+                        />
+                    </View>
+                </>}
             </View>
         </View>
     );
