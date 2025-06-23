@@ -9,6 +9,7 @@ import { DateInput } from '../components/dateInput';
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
 import { formatDate } from "../utils/formatDate";
+import { isValidEmail } from "../utils/formValidation";
 
 const RegisterScreen = () => {
     const [name, setName] = useState<string>("");
@@ -26,6 +27,19 @@ const RegisterScreen = () => {
             setDateOfBirth(selectedDate);
         }
     };
+
+    const handleSubmit = () => {
+        const hasError = !name || !email || !isValidEmail(email);
+        setError(hasError);
+
+        if (!hasError) {
+            registerController.register({
+                name,
+                email,
+                dateOfBirth: formatDate(dateOfBirth),
+            });
+        }
+    }
 
     useEffect(() => {
         registerController.subscribe({
@@ -87,11 +101,7 @@ const RegisterScreen = () => {
                     <View style={styles.buttonBox}>
                         <MyButton 
                             value="Register"
-                            props={{ onPress: () => 
-                                registerController.register(
-                                    { name, email, dateOfBirth: formatDate(dateOfBirth) }
-                                )
-                            }}
+                            props={{ onPress: () => handleSubmit()}}
                         />
                     </View>
                 </View>
