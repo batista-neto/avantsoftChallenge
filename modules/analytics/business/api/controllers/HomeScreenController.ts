@@ -3,6 +3,7 @@ import { HomeScreenObserver } from "../observers/HomeScreenObserver";
 
 export interface HomeScreenController {
     getSalesReport(): Promise<void>;
+    getReportOfSalesPerDay(clients: Client[]): { data: string; volume: number }[]
     getCustomerWithHighestSalesVolume(clients: Client[]): { name: string; total: number }
     getCustomerWithHighestAvarageSale(clientes: Client[]): {name: string, average: number};
     getCustumerWithMostFrequency(clients: Client[]): {name: string, qty: number};

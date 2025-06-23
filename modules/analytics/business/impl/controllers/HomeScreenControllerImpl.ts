@@ -17,6 +17,24 @@ export class HomeScreenControllerImpl implements HomeScreenController {
         }
     }
 
+    getReportOfSalesPerDay(clients: Client[]): { data: string; volume: number }[] {
+      const salesMap: Record<string, number> = {};
+  
+      clients.forEach(client => {
+          client.statistics.sales.forEach(sale => {
+              if (!salesMap[sale.data]) {
+                  salesMap[sale.data] = 1;
+              } else {
+                  salesMap[sale.data]++;
+              }
+          });
+      });
+  
+      return Object.entries(salesMap)
+          .map(([data, volume]) => ({ data, volume }))
+          .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+  }
+
     getCustomerWithHighestSalesVolume(clients: Client[]): { name: string; total: number } {
       const topClient = clients.reduce((acc, client) => {
           const total = client.statistics.sales.reduce((sum, sale) => sum + sale.valor, 0);

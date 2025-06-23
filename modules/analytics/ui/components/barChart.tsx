@@ -1,4 +1,5 @@
-import { Client } from 'modules/analytics/business';
+import { useInject } from 'core/di/screens';
+import { Client, HomeScreenController } from 'modules/analytics/business';
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -7,24 +8,12 @@ interface barChartProps {
 }
 
 export const BarChart = ({ clients }: barChartProps) => {
+    const homeScreenController = useInject<HomeScreenController>("HomeScreenController");
+
     const salesPerDay = useMemo(() => {
-        const salesMap: Record<string, number> = {};
-
-        clients.forEach(client => {
-            client.statistics.sales.forEach(sale => {
-                if (!salesMap[sale.data]) {
-                    salesMap[sale.data] = 1;
-                } else {
-                    salesMap[sale.data]++;
-                }
-            });
-        });
-
-        return Object.entries(salesMap)
-            .map(([data, volume]) => ({ data, volume }))
-            .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+        return homeScreenController.getReportOfSalesPerDay(clients);
     }, [clients]);
-
+    
     const maxVendas = Math.max(...salesPerDay.map(d => d.volume), 0);
 
     return (
