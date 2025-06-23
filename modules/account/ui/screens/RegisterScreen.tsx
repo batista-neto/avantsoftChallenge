@@ -3,7 +3,7 @@ import { useInject } from "core/di/screens";
 import { ScreenInfo } from "core/navigation/api";
 import { RegisterController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { DateInput } from '../components/dateInput';
 import { Form } from "../components/form";
@@ -55,53 +55,57 @@ const RegisterScreen = () => {
     }, []);
 
     return (
-        <Pressable style={styles.overlay} onPress={() => navigation.goBack()}>
-            <View style={styles.modalContainer}>
-                <Form 
-                    title="Full name"
-                    value={name}
-                    onChangeValue={setName}
-                    placeholder="Insert your full name"
-                />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.overlay}>
+                <Pressable style={styles.backdrop} onPress={() => navigation.goBack()} />
 
-                <Form 
-                    title="Email"
-                    value={email}
-                    onChangeValue={setEmail}
-                    placeholder="Insert your email"
-                />
-
-                <DateInput 
-                    date={dateOfBirth}
-                    setDate={setDateOfBirth}
-                    showPicker={showPicker}
-                    setShowPicker={setShowPicker}
-                    handleDateChange={handleDateChange}
-                />
-
-                {error && <Text style={styles.textError}>Fill in all fields correctly</Text>}
-
-                <View style={styles.buttonBox}>
-                    <MyButton 
-                        value="Register"
-                        props={{ onPress: () => 
-                            registerController.register(
-                                { name, email, dateOfBirth: formatDate(dateOfBirth) }
-                            )
-                        }}
+                <View style={styles.modalContainer}>
+                    <Form 
+                        title="Full name"
+                        value={name}
+                        onChangeValue={setName}
+                        placeholder="Insert your full name"
                     />
+
+                    <Form 
+                        title="Email"
+                        value={email}
+                        onChangeValue={setEmail}
+                        placeholder="Insert your email"
+                    />
+
+                    <DateInput 
+                        date={dateOfBirth}
+                        setDate={setDateOfBirth}
+                        showPicker={showPicker}
+                        setShowPicker={setShowPicker}
+                        handleDateChange={handleDateChange}
+                    />
+
+                    {error && <Text style={styles.textError}>Fill in all fields correctly</Text>}
+
+                    <View style={styles.buttonBox}>
+                        <MyButton 
+                            value="Register"
+                            props={{ onPress: () => 
+                                registerController.register(
+                                    { name, email, dateOfBirth: formatDate(dateOfBirth) }
+                                )
+                            }}
+                        />
+                    </View>
                 </View>
             </View>
-        </Pressable>
+        </TouchableWithoutFeedback>
     );
 };
 
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
     },
     modalContainer: {
         width: '90%',
@@ -125,6 +129,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
+    },
+    backdrop: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.6)",
     },
 });
 
