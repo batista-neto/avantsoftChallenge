@@ -55,7 +55,7 @@ const HomeScreen = () => {
                 
             <Header title="Sales report" />
             <ScrollView contentContainerStyle={styles.container}>
-                <BarChart clients={clients} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                <BarChart clients={clients} />
 
                 <BoxtInfo
                     title="Customer with the highest sales volume:"
