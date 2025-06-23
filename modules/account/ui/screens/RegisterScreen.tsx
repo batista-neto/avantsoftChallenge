@@ -41,6 +41,10 @@ const RegisterScreen = () => {
                 console.log("Loading:", isLoading);
             }
         });
+
+        return () => {
+            registerController.unsubscribe();
+        }
     }, []);
 
     return (

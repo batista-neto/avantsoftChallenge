@@ -1,5 +1,5 @@
 import { useInject } from "core/di/screens";
-import { Navigator, ScreenInfo } from "core/navigation/api";
+import { ScreenInfo } from "core/navigation/api";
 import { AuthController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -12,7 +12,6 @@ const LoginScreen = () => {
     const [loginError, setLoginError] = useState<boolean>(false);
 
     const authController = useInject<AuthController>("AuthController");
-    const navigator = useInject<Navigator>("Navigator");
 
     useEffect(() => {
         authController.subscribe({
@@ -28,7 +27,11 @@ const LoginScreen = () => {
                 console.log("Loading:", isLoading);
             }
         })
-    })
+
+        return () => {
+            authController.unSubscribe();
+        }
+    }, []);
 
     return (
         <View style={styles.container}>
