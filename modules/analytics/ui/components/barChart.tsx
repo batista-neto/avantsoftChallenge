@@ -28,23 +28,25 @@ export const BarChart = ({ clients, selectedDate = new Date('2024-01-01'), setSe
     return (
         <>
             <View>
-                <Pressable onPress={() => setShowPicker(true)} style={styles.dateButton}>
-                    <Text style={styles.dateButtonText}>Select date</Text>
-                </Pressable>
+                <View style={styles.barHeader}>
+                    <Text style={styles.title}>Sales on {formattedDate}</Text>
 
-                {showPicker && (
-                    <DateTimePicker
-                        value={selectedDate}
-                        mode="date"
-                        display="calendar"
-                        onChange={(_event, date) => {
-                            setShowPicker(false);
-                            if (date) setSelectedDate(date);
-                        }}
-                    />
-                )}
+                    <Pressable onPress={() => setShowPicker(true)} style={styles.dateButton}>
+                        <Text style={styles.dateButtonText}>Select date</Text>
+                    </Pressable>
 
-                <Text style={styles.title}>Sales on {formattedDate}</Text>
+                    {showPicker && (
+                        <DateTimePicker
+                            value={selectedDate}
+                            mode="date"
+                            display="calendar"
+                            onChange={(_event, date) => {
+                                setShowPicker(false);
+                                if (date) setSelectedDate(date);
+                            }}
+                        />
+                    )}
+                </View>
 
                 <View style={styles.graphCard}>
                     <View style={styles.chartContainer}>
@@ -94,6 +96,12 @@ export const BarChart = ({ clients, selectedDate = new Date('2024-01-01'), setSe
 };
 
 const styles = StyleSheet.create({
+    barHeader: {
+        paddingHorizontal: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     graphCard: {
         backgroundColor: '#fff',
         borderRadius: 12,
