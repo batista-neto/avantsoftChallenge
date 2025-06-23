@@ -87,3 +87,7 @@ Front pode consumir API real ou mockada via ferramenta
 Para fazer o login no aplicativo utilize:
    - usuario: admin
    - senha: admin
+
+### Demo
+
+[demonstration.webm](https://github.com/user-attachments/assets/9fc9cef8-e7f6-4e8d-9c85-4caef5a48764)
