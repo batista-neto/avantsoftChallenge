@@ -1,6 +1,8 @@
 // components/Sidebar.tsx
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
 import { useInject } from 'core/di/screens';
+import { Navigator } from 'core/navigation';
 import { AuthController } from 'modules/account/business/api';
 import React from 'react';
 import {
@@ -31,6 +33,7 @@ export const MenuBar = ({ visible, onClose }: menuBarProps) => {
   const translateX = React.useRef(new Animated.Value(-SCREEN_WIDTH)).current;
 
   const authController = useInject<AuthController>("AuthController");
+  const navigator = useInject<Navigator>("Navigator");
 
   React.useEffect(() => {
     Animated.timing(translateX, {
@@ -44,12 +47,18 @@ export const MenuBar = ({ visible, onClose }: menuBarProps) => {
 
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      {/* Overlay clicável */}
       <Pressable style={styles.overlay} onPress={onClose} />
-
-      {/* Menu deslizante */}
       <Animated.View style={[styles.sidebar, { transform: [{ translateX }] }]}>
         <Text style={styles.title}>Menu</Text>
+
+        <MenuItem
+          label="Register"
+          onPress={() => {
+            navigator.navigate('Register');
+            onClose();
+          }}
+          icon={<Feather name="user-plus" size={24} color="black" />}
+        />
 
         <MenuItem
           label="Logout"
@@ -59,8 +68,6 @@ export const MenuBar = ({ visible, onClose }: menuBarProps) => {
           }}
           icon={<AntDesign name="logout" size={24} color="black" />}
         />
-
-        {/* Mais opções aqui... */}
       </Animated.View>
     </View>
   );

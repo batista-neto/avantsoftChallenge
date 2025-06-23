@@ -11,6 +11,7 @@ import { DIProvider } from 'core/di/screens';
 import { NavDefaultTree } from 'core/navigation';
 import { ScreenFactoryFactory, ScreenGroups } from 'core/navigation/api';
 import React from 'react';
+import Toast from 'react-native-toast-message';
 
 export default function App() {
   const container = DIContainerImpl.getDefault();
@@ -29,6 +30,7 @@ export default function App() {
   return (
     <DIProvider container={container}>
       {tree.create(factory, groups)}
+      <Toast />
     </DIProvider>
   );
 }

@@ -4,6 +4,7 @@ import { ScreenInfo } from "core/navigation/api";
 import { RegisterController } from "modules/account/business/api";
 import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 import { DateInput } from '../components/dateInput';
 import { Form } from "../components/form";
 import { MyButton } from "../components/myButton";
@@ -33,6 +34,12 @@ const RegisterScreen = () => {
                 setEmail("");
                 setDateOfBirth(new Date());
                 setError(false);
+                Toast.show({
+                    type: 'success',
+                    text1: 'Registered successfully',
+                    position: 'bottom',
+                    visibilityTime: 5000,
+                  });
             },
             onError: () => {
                 setError(true);
