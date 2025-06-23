@@ -54,7 +54,7 @@ export const BarChart = ({ clients }: barChartProps) => {
                                         }]} />
 
                                         <Text style={styles.xLabel} numberOfLines={1} adjustsFontSizeToFit>
-                                            {new Intl.DateTimeFormat('pt-BR').format(new Date(item.data))}
+                                            {new Intl.DateTimeFormat('pt-BR').format(new Date(new Date(item.data).getTime() + 3 * 60 * 60 * 1000))}
                                         </Text>
                                     </View>
                                 );
