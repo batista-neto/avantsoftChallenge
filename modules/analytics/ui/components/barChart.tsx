@@ -1,4 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Client } from 'modules/analytics/business';
 import React, { useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import { formatDate } from '../utils/formatDate';
@@ -6,23 +7,20 @@ import { formatDate } from '../utils/formatDate';
 const screenWidth = Dimensions.get("window").width;
 
 interface barChartProps {
-    clientes: {
-        nome: string;
-        vendas: { data: string; valor: number }[];
-    }[];
+    clients: Client[];
     selectedDate?: Date;
     setSelectedDate(date: Date): void;
 }
 
-export const BarChart = ({ clientes, selectedDate = new Date('2024-01-01'), setSelectedDate }: barChartProps) => {
+export const BarChart = ({ clients, selectedDate = new Date('2024-01-01'), setSelectedDate }: barChartProps) => {
     const [showPicker, setShowPicker] = useState(false);
 
     const formattedDate = formatDate(selectedDate);
+    
+    const dados = clients.map(c => {
+        const volumeNoDia = c.statistics.sales.filter(v => v.data === formattedDate).length;
 
-    const dados = clientes.map(c => {
-        const volumeNoDia = c.vendas.filter(v => v.data === formattedDate).length;
-
-        return { nome: c.nome, volume: volumeNoDia };
+        return { nome: c.user.name, volume: volumeNoDia };
     });
 
     const maxVendas = Math.max(...dados.map(d => d.volume), 0);
@@ -30,8 +28,6 @@ export const BarChart = ({ clientes, selectedDate = new Date('2024-01-01'), setS
     return (
         <>
             <View>
-                <Text style={styles.title}>Sales on {formattedDate}</Text>
-
                 <Pressable onPress={() => setShowPicker(true)} style={styles.dateButton}>
                     <Text style={styles.dateButtonText}>Select date</Text>
                 </Pressable>
@@ -47,6 +43,8 @@ export const BarChart = ({ clientes, selectedDate = new Date('2024-01-01'), setS
                         }}
                     />
                 )}
+
+                <Text style={styles.title}>Sales on {formattedDate}</Text>
 
                 <View style={styles.graphCard}>
                     <View style={styles.chartContainer}>

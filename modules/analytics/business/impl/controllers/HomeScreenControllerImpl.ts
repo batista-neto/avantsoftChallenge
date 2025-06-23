@@ -18,7 +18,7 @@ export class HomeScreenControllerImpl implements HomeScreenController {
     }
 
     getCustomerWithHighestAvarageSale(clients: Client[], selectedDate: Date): {name: string, average: number} {
-       const response = clients.flat().reduce(
+       const response = clients.reduce(
         (topClient, client) => {
           const vendasFiltradas = client.statistics.sales.filter(
             (venda) => venda.data === this.formatDate(selectedDate)
@@ -41,7 +41,7 @@ export class HomeScreenControllerImpl implements HomeScreenController {
     }
 
     getCustumerWithMostFrequency(clients: Client[]): { name: string, qty: number } {
-        const response = clients.flat().reduce((mostFrequency, client) => {
+        const response = clients.reduce((mostFrequency, client) => {
             const qty = client.statistics.sales.length;
         
             return qty > mostFrequency.qty ? { name: client.user.name, qty } : mostFrequency;

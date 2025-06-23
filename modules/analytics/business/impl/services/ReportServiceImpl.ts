@@ -8,9 +8,9 @@ export class ReportServiceImpl implements ReportService {
 
         try {
             const response = await axios.get(`${this.baseUrl}/report`);
-            
+
             const payload: Report = {
-                clients: [
+                clients:
                     response.data.data.clientes.map((client: any) => ({
                         user: {
                             name: client.info.nomeCompleto,
@@ -20,8 +20,7 @@ export class ReportServiceImpl implements ReportService {
                         statistics: {
                             sales: client.estatisticas.vendas || []
                         }
-                    }))
-                ],
+                    })),
                 meta: {
                     recordTotal: response.data.meta?.recordTotal || 0,
                     page: response.data.meta?.page || 1
