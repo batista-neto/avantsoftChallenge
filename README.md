@@ -61,3 +61,29 @@ O candidato deve extrair corretamente os dados relevantes e ignorar as informaç
 
 Requisitos:
 Front pode consumir API real ou mockada via ferramenta
+
+
+## Como rodar o projeto
+
+### Pré-requisitos
+- Node.js instalado (versão recomendada: 16 ou superior)
+- npm instalado
+- Ambiente configurado para React Native:
+  - Para Android: Android Studio e Java configurados
+  - Para iOS: Xcode instalado
+
+### Passos para rodar o projeto
+
+1. Instale as dependências:
+   ```sh
+   npm install
+
+   Execute o aplicativo:
+      - npm run android
+
+
+### Para fazer o login
+
+Para fazer o login no aplicativo utilize:
+   - usuario: admin
+   - senha: admin
