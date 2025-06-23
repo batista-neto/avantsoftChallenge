@@ -3,31 +3,37 @@ import { ScreenInfo } from "core/navigation/api";
 import { Header } from "ds/components/header";
 import { Client, HomeScreenController } from "modules/analytics/business";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { BackHandler, ScrollView, StyleSheet, Text, View } from "react-native";
 import { BarChart } from '../components/barChart';
 import { BoxtInfo } from "../components/boxInfo";
-
-const clientes = [
-  { nome: "Ana Beatriz", vendas: [{ data: "2024-01-01", valor: 150 }, { data: "2024-01-02", valor: 50 }] },
-  { nome: "Carlos Eduardo", vendas: [{ data: "2024-01-01", valor: 15 }] },
-  { nome: "Juliana Lima", vendas: [{ data: "2024-01-01", valor: 80 }] },
-];
+import { MenuBar } from "../components/menuBar";
+import { MenuIcon } from "../components/menuIcon";
 
   
 const HomeScreen = () => {
-    const [clientess, setClientess] = useState<Client[]>([]);
+    const [clients, setClients] = useState<Client[]>([]);
     const [selectedDate, setSelectedDate] = useState(new Date('2024-01-02'));
+    const [menuVisible, setMenuVisible] = useState(false);
 
     const homeScreenControler = useInject<HomeScreenController>("HomeScreenController");
 
-    const customerWithHighestAvarageSale = homeScreenControler.getCustomerWithHighestAvarageSale(clientess, selectedDate)
+    const customerWithHighestAvarageSale = homeScreenControler.getCustomerWithHighestAvarageSale(clients, selectedDate)
 
-    const clientEithMostFrequency = homeScreenControler.getCustumerWithMostFrequency(clientess)
+    const clientEithMostFrequency = homeScreenControler.getCustumerWithMostFrequency(clients)
 
     useEffect(() => {
+        const backAction = () => {
+            BackHandler.exitApp();
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction
+        );
+
         homeScreenControler.subscribe({
             onSalesReport(report) {
-                setClientess(report.clients);
+                setClients(report.clients);
             },
             onError(error: string) {
                 console.error("Error:", error);
@@ -38,14 +44,18 @@ const HomeScreen = () => {
 
         return () => {
             homeScreenControler.unsubscribe();
+            backHandler.remove();
         }
     }, [selectedDate])
 
     return (
-        <>
+        <>  
+            <MenuIcon onPress={() => setMenuVisible(true)} />
+            <MenuBar visible={menuVisible} onClose={() => setMenuVisible(false)} />
+                
             <Header title="Sales report" />
             <ScrollView contentContainerStyle={styles.container}>
-                <BarChart clientes={clientes} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                <BarChart clients={clients} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
 
                 <BoxtInfo
                     title="Customer with the highest average sales:"
@@ -61,11 +71,11 @@ const HomeScreen = () => {
 
                 <View style={styles.letrasFaltandoContainer}>
                     <Text style={styles.topClienteTitle}>Letter of the alphabet that does not yet appear in the name:</Text>
-                    {clientes.map((cliente) => (
-                        <View key={cliente.nome} style={styles.clienteItem}>
-                        <Text style={styles.clienteNome}>{cliente.nome}</Text>
+                    {clients.map((client) => (
+                        <View key={client.user.name} style={styles.clienteItem}>
+                        <Text style={styles.clienteNome}>{client.user.name}</Text>
                         <Text style={styles.letraFaltando}>
-                            Missing letter: {homeScreenControler.getLetterForCustomer(cliente.nome)}
+                            Missing letter: {homeScreenControler.getLetterForCustomer(client.user.name)}
                         </Text>
                         </View>
                     ))}
